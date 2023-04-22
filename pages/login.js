@@ -1,0 +1,131 @@
+import { useEffect, useState } from "react";
+import { getCookie, setCookie } from "cookies-next";
+import { useRouter } from "next/router";
+
+function Login() {
+  const router = useRouter();
+  useEffect(() => {
+    if (localStorage.getItem("user") || getCookie("user")) {
+      router.push("/");
+    }
+  }, []);
+
+  const [formValues, setFormValues] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [formErrors, setFormErrors] = useState({});
+
+  const handleChange = (e) => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const errors = validateForm(formValues);
+    if (Object.keys(errors).length === 0) {
+      let data = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify(formValues),
+      });
+      let res = await data.json();
+      console.log(res);
+      if (res.success) {
+        localStorage.setItem("user", res.token.toString());
+        setCookie("user", res.token, { maxAge: 60 * 60 * 24 * 365 });
+        router.push("/");
+      }
+      console.log(formValues);
+    } else {
+      setFormErrors(errors);
+    }
+  };
+
+  const validateForm = (values) => {
+    const errors = {};
+
+    if (!values.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      errors.email = "Email address is invalid";
+    }
+
+    if (!values.password) {
+      errors.password = "Password is required";
+    }
+
+    return errors;
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-200">
+      <div className="m-auto w-1/3 text-white flex flex-wrap justify-center shadow-lg rounded-lg bg-gradient-to-br from-indigo-900 to-purple-700">
+        <form className="m-5 w-10/12" onSubmit={handleSubmit}>
+          <h1 className="w-full text-4xl tracking-widest text-center my-6">
+            Login
+          </h1>
+          <div className="mb-4">
+            <label
+              className="block text-gray-200 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
+              Email Address
+            </label>
+            <input
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                formErrors.email ? "border-red-500" : ""
+              }`}
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Your email address"
+              value={formValues.email}
+              onChange={handleChange}
+            />
+            {formErrors.email && (
+              <span className="text-red-500 text-sm mt-1">
+                {formErrors.email}
+              </span>
+            )}
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-200 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+                formErrors.password ? "border-red-500" : ""
+              }`}
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Your password"
+              value={formValues.password}
+              onChange={handleChange}
+            />
+            {formErrors.password && (
+              <span className="text-red-500 text-sm mt-1">
+                {formErrors.password}
+              </span>
+            )}
+          </div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default Login;
