@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
+import podcast from "../models/podcast";
 function HomePage() {
   const router = useRouter();
   useEffect(() => {
@@ -41,3 +42,9 @@ function HomePage() {
 }
 
 export default HomePage;
+export async function getServerSideProps(context) {
+  let data=await podcast.find()
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}

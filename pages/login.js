@@ -52,7 +52,7 @@ function Login() {
           theme: "light",
           });
         if (res.isAdmin) {
-          router.push("/admin/dashboard");
+          router.push("/Admin/dashboard");
         } else {
           router.push("/Podcast/trending");
         }
