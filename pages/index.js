@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import podcast from "../models/podcast";
+import connectMongo from "../middleware/connectTodb";
 function HomePage() {
   const router = useRouter();
   useEffect(() => {
@@ -43,6 +44,7 @@ function HomePage() {
 
 export default HomePage;
 export async function getServerSideProps(context) {
+  await connectMongo()
   let data=await podcast.find()
   return {
     props: {}, // will be passed to the page component as props
