@@ -1,8 +1,9 @@
 import ConnectToMongo from "../../middleware/connectTomongo";
+
 import podcast from "../../models/podcast";
 var jwt = require("jsonwebtoken");
 const handler = async (req, res) => {
-  if (req.method == "POST") {
+  if (req.method == "GET") {
     try {
       // verifying users jwt
       const data = req.headers["auth"];
@@ -10,19 +11,12 @@ const handler = async (req, res) => {
         var decrypted = await jwt.verify(data, process.env.SECRET);
         if (decrypted) {
           req.user = decrypted;
-          const { name, description, type, category, speaker, link } =
-            JSON.parse(req.body);
-          let Podcast = new podcast({
-            name: name,
-            description: description,
-            type: type,
-            category: category,
-            speaker: speaker,
-            link: link,
-            user: req.user.user._id,
-          });
-          await Podcast.save();
-          return res.status(200).send({message:"Podcast created"});
+          let Podcast = await podcast.find({
+              user: req.user.user._id,
+            });
+            console.log(req.user.user._id);
+
+          return res.status(200).send(Podcast);
         }
         return res.send({ message: "Invalid" });
       }

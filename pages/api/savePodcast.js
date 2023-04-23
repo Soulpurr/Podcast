@@ -1,5 +1,5 @@
 import ConnectToMongo from "../../middleware/connectTomongo";
-import podcast from "../../models/podcast";
+import savedPodcast from "../../models/savedPodcast";
 var jwt = require("jsonwebtoken");
 const handler = async (req, res) => {
   if (req.method == "POST") {
@@ -12,7 +12,7 @@ const handler = async (req, res) => {
           req.user = decrypted;
           const { name, description, type, category, speaker, link } =
             JSON.parse(req.body);
-          let Podcast = new podcast({
+          let Podcast = new savedPodcast({
             name: name,
             description: description,
             type: type,
@@ -22,7 +22,7 @@ const handler = async (req, res) => {
             user: req.user.user._id,
           });
           await Podcast.save();
-          return res.status(200).send({message:"Podcast created"});
+          return res.status(200).send({message:"Podcast Saved"});
         }
         return res.send({ message: "Invalid" });
       }

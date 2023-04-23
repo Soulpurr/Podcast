@@ -1,18 +1,51 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../Components/Navigation/AllPodcasts/Sidebar";
 import CardItem from "../../Components/Navigation/AllPodcasts/CardItem";
 import { useRouter } from "next/router";
+import podcast from "../../models/podcast";
+import { getCookie } from "cookies-next";
 
-function Podcast() {
+function Podcast({ data }) {
   const router = useRouter();
-  console.log(router.query.slug)
+  console.log(data);
   return (
     <div>
       <Sidebar />
+      <div className="text-center font-bold text-2xl ">
+        {router.query.slug.toUpperCase()}
+      </div>
 
-      <CardItem title={router.query.slug} />
+      <CardItem title={router.query.slug} data={data} />
     </div>
   );
 }
 
 export default Podcast;
+export async function getServerSideProps(context) {
+  let data;
+  if (context.query.slug.toString() == "all") {
+    data = await podcast.find();
+  } else if (context.query.slug.toString() == "myPodcasts") {
+    let req = context.req;
+    let res = context.res;
+    let resp = await fetch("http://localhost:3000/api/myPodcast", {
+      method: "GET",
+      headers: {
+        auth: getCookie("user", { req, res }),
+      },
+    });
+    data = await resp.json();
+  }
+  else if(context.query.slug.toString() == "trending"){
+    let d = await podcast.find();
+    data=[]
+    d.map(item=>{item.like>1?data.push(item):data.push()})
+  } else {
+    data = await podcast.find({ category: context.query.slug.toLowerCase() });
+  }
+  return {
+    props: {
+      data: JSON.parse(JSON.stringify(data)),
+    }, // will be passed to the page component as props
+  };
+}

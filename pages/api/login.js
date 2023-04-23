@@ -18,7 +18,9 @@ const handler = async (req, res) => {
             expiresIn: "7d",
           });
 
-          return res.status(200).send({ token, success });
+          return res
+            .status(200)
+            .send({ token, success, isAdmin: user.isAdmin });
         }
         success = false;
         return res

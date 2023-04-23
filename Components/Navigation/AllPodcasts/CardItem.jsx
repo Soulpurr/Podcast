@@ -1,21 +1,42 @@
+import Image from "next/image";
+import { useRouter } from "next/router";
 import React from "react";
-
+import { BsHandThumbsUpFill } from "react-icons/bs";
 function CardItem(props) {
+  const { title, data } = props;
+  const router = useRouter();
   return (
-    <div className="sm:ml-64 lg:ml-96">
-      <div className="text-2xl font-bold text-center ">{props.title.toUpperCase()}</div>
-      <div className="flex flex-col justify-center items-center sm:grid sm:grid-cols-2 sm:gap-2  lg::grid-cols-3 ">
-        <div className="mt-12 lg hover:bg-slate-100 cursor-pointer hover:animate-pulse flex flex-col items-center justify-center bg-white w-[90%] lg:w-[48%] h-48 shadow-lg rounded-lg overflow-hidden ">
-          <div className="flex justify-center">
+    <div className="sm:ml-64 lg:ml-[27%]">
+      <div className="p-3  sm:grid md:grid-cols-2 xl:grid-cols-4">
+        {data.map((item) => (
+          <div
+            onClick={() => {
+              router.push(`/Play/${item._id}`);
+            }}
+            key={item._id}
+            className=" rounded-md group p-2 cursor-pointer transition-all duration-200 ease-in transform sm:hover:scale-105 hover:z-50  "
+          >
             <img
-              className=" justify-center w-40 lg:w-[75%] h-30 object-cover"
-              src="https://source.unsplash.com/random"
-              alt="Card"
+              layout="responsive"
+              src={`https://picsum.photos/200/200?random=${Math.random()}`}
+              height={1080}
+              width={1920}
             />
+            <div className="">
+              <h1 className=" text-xl transition-all duration-100 ease-in-out group-hover:font-extrabold">
+                {item.name}
+              </h1>
+              <div className="flex justify-between">
+                <h1 className="truncate items-center text-xl">
+                  By-{item.speaker}
+                </h1>
+                <p className="opacity-0 group-hover:opacity-100">
+                  <BsHandThumbsUpFill className="h-5 mx-3 cursor-pointer" />
+                </p>
+              </div>
+            </div>
           </div>
-          <h3 className="font-semibold text-lg  text-center">Card Title</h3>
-          <h3 className="font-semibold text-lg text-center">By-HH</h3>
-        </div>
+        ))}
       </div>
     </div>
   );

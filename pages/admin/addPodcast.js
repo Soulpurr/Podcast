@@ -1,11 +1,16 @@
 import { useState } from "react";
 import Sidebar from "../../Components/Navigation/Admin/Sidebar";
 import Header from "../../Components/Navigation/Admin/Header";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 function PodcastForm() {
+  const router = useRouter();
+  const [recieved, setrecieved] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
   const [image, setimage] = useState();
   const handleImage = async (e) => {
+    setrecieved(false);
     let data = new FormData();
     e.preventDefault();
     data.append("file", image);
@@ -32,6 +37,7 @@ function PodcastForm() {
     // setdata({ link: img.data.secure_url });
     let asset = await img.json();
     console.log(asset.secure_url);
+    setrecieved(true);
     setFormValues({ ...formValues, link: asset.secure_url });
   };
   function handleFileInputChange(event) {
@@ -65,7 +71,18 @@ function PodcastForm() {
       },
     });
     let res = await data.json();
+    toast("🦄Podcast Added", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
     console.log(res);
+    router.push("/admin/dashboard");
   };
 
   return (
@@ -201,12 +218,21 @@ function PodcastForm() {
                 onChange={handleFileInputChange}
               />
             </div>
-            <button
-              className="mt-3 border-solid border-2 p-1 rounded-lg bg-blue-400 px-6 border-black"
-              onClick={handleImage}
-            >
-              Upload
-            </button>
+            <div className="flex justify-between">
+              <button
+                className="mt-3 border-solid border-2 p-1 rounded-lg bg-blue-400 px-6 border-black"
+                onClick={handleImage}
+              >
+                Upload
+              </button>
+              <div
+                className={`${
+                  recieved ? "hidden" : "flex"
+                } justify-center items-center`}
+              >
+                <div className="w-8 h-8 border-4 border-t-4 border-red-800 rounded-full animate-spin"></div>
+              </div>
+            </div>
           </div>
 
           <button

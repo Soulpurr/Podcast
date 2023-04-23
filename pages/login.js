@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 function Login() {
   const router = useRouter();
   useEffect(() => {
     if (localStorage.getItem("user") || getCookie("user")) {
-      router.push("/");
+      router.push("/Podcast/trending");
     }
   }, []);
 
@@ -37,10 +38,36 @@ function Login() {
       if (res.success) {
         localStorage.setItem("user", res.token.toString());
         setCookie("user", res.token, { maxAge: 60 * 60 * 24 * 365 });
-        router.push("/");
+        localStorage.setItem("isAdmin", res.isAdmin);
+        setCookie("user", res.token, { maxAge: 60 * 60 * 24 * 365 });
+        toast('Logged In ', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+        if (res.isAdmin) {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/Podcast/trending");
+        }
       }
       console.log(formValues);
     } else {
+      toast('🦄 Error', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
       setFormErrors(errors);
     }
   };

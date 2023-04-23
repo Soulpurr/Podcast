@@ -6,10 +6,13 @@ import { AiOutlineClose } from "react-icons/ai";
 import { HiOutlineTrendingUp } from "react-icons/hi";
 import { DiTechcrunch } from "react-icons/di";
 import { GiDistraction } from "react-icons/gi";
-import { RiPsychotherapyLine } from "react-icons/ri";
+import { GrLogout } from "react-icons/gr";
+import { GrUserAdmin } from "react-icons/gr";
+import { deleteCookie } from "cookies-next";
 
 import { GiHomeGarage, GiHamburgerMenu } from "react-icons/gi";
 import Link from "next/link";
+import SearchBar from "../SearchBar";
 
 function Sidebar() {
   const [ham, setham] = useState(false);
@@ -24,9 +27,8 @@ function Sidebar() {
         <GiHamburgerMenu size={25} />
       </div>
       <div
-        className={`${
-          ham ? "flex flex-col" : "hidden"
-        } w-[60%] sm:w-[25%] bg-slate-300 h-full sm:flex sm:flex-col fixed`}
+        className={`${ham ? "flex flex-col" : "hidden"} z-10
+         w-[60%] sm:w-[25%] bg-slate-300 h-full sm:flex sm:flex-col fixed`}
       >
         <div
           className={`${ham ? "" : "hidden"} sm:hidden`}
@@ -36,9 +38,10 @@ function Sidebar() {
         >
           <AiOutlineClose size={25} />
         </div>
+        <SearchBar />
         <Link
           href={"/Podcast/all"}
-          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-10 p-4"
+          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-5 p-4"
         >
           <div className="">
             <BsFillMicFill size={25} />
@@ -47,7 +50,7 @@ function Sidebar() {
         </Link>
         <Link
           href={"/Podcast/myPodcasts"}
-          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-10 p-4"
+          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-5 p-4"
         >
           <div className="">
             <GiHomeGarage size={25} />
@@ -56,7 +59,7 @@ function Sidebar() {
         </Link>
         <Link
           href={"/Podcast/trending"}
-          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-10 p-4"
+          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-5 p-4"
         >
           <div className="">
             <HiOutlineTrendingUp size={25} />
@@ -65,7 +68,7 @@ function Sidebar() {
         </Link>
         <Link
           href={"/Podcast/technology"}
-          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-10 p-4"
+          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-5 p-4"
         >
           <div className="">
             <DiTechcrunch size={25} />
@@ -74,30 +77,37 @@ function Sidebar() {
         </Link>
         <Link
           href={"/Podcast/action"}
-          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-10 p-4"
+          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-5 p-4"
         >
           <div className="">
             <GiDistraction size={25} />
           </div>
           <div className="text-xl font-semibold">Action</div>
         </Link>
+
         <Link
-          href={"/Podcast/others"}
-          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-10 p-4"
+         
+          href={"/admin/dashboard"}
+          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-5 p-4"
         >
           <div className="">
-            <RiPsychotherapyLine size={25} />
+            <GrUserAdmin size={25} />
           </div>
-          <div className="text-xl font-semibold">Others</div>
+          <div className="text-xl font-semibold">Admin</div>
         </Link>
         <Link
-          href={"/Podcast/liked"}
-          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-10 p-4"
+          onClick={() => {
+            localStorage.clear(),
+              deleteCookie("user"),
+              window.location.reload();
+          }}
+          href={"/"}
+          className="hover:text-blue-600 cursor-pointer hover:animate-bounce flex space-x-10 mt-5 p-4"
         >
           <div className="">
-            <FcLike size={25} />
+            <GrLogout size={25} />
           </div>
-          <div className="text-xl font-semibold">Liked</div>
+          <div className="text-xl font-semibold">LogOut</div>
         </Link>
       </div>
     </>
