@@ -43,12 +43,21 @@ export async function getServerSideProps(context) {
     };
   }
   let data;
-  let resp = await fetch("http://localhost:3000/api/adminPodcasts", {
-    method: "GET",
-    headers: {
-      auth: getCookie("user", { req, res }),
-    },
-  });
+  let resp = await fetch(
+    "https://podcast-1a7qb74vk-soulpurr.vercel.app/api/adminPodcasts",
+    {
+      method: "GET",
+      headers: {
+        auth: getCookie("user", { req, res }),
+      },
+    }
+  );
+  // let resp = await fetch("http://localhost:3000/api/adminPodcasts", {
+  //   method: "GET",
+  //   headers: {
+  //     auth: getCookie("user", { req, res }),
+  //   },
+  // });
   data = await resp.json();
 
   return {

@@ -37,12 +37,21 @@ export async function getServerSideProps(context) {
         props: {},
       };
     }
-    let resp = await fetch("http://localhost:3000/api/myPodcast", {
-      method: "GET",
-      headers: {
-        auth: getCookie("user", { req, res }),
-      },
-    });
+    let resp = await fetch(
+      "https://podcast-1a7qb74vk-soulpurr.vercel.app/api/myPodcast",
+      {
+        method: "GET",
+        headers: {
+          auth: getCookie("user", { req, res }),
+        },
+      }
+    );
+    // let resp = await fetch("http://localhost:3000/api/myPodcast", {
+    //   method: "GET",
+    //   headers: {
+    //     auth: getCookie("user", { req, res }),
+    //   },
+    // });
     data = await resp.json();
   } else if (context.query.slug.toString() == "trending") {
     let d = await podcast.find();
