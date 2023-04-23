@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 function Login() {
   const router = useRouter();
@@ -143,12 +144,22 @@ function Login() {
               </span>
             )}
           </div>
+          <div className="flex justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
             Login
           </button>
+          <Link
+          href={'/signUp'}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            SignUp
+          </Link>
+          
+          </div>
         </form>
       </div>
     </div>

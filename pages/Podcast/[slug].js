@@ -28,6 +28,15 @@ export async function getServerSideProps(context) {
   } else if (context.query.slug.toString() == "myPodcasts") {
     let req = context.req;
     let res = context.res;
+    if (!getCookie("user", { req, res })) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/login",
+        },
+        props: {},
+      };
+    }
     let resp = await fetch("http://localhost:3000/api/myPodcast", {
       method: "GET",
       headers: {
@@ -35,11 +44,12 @@ export async function getServerSideProps(context) {
       },
     });
     data = await resp.json();
-  }
-  else if(context.query.slug.toString() == "trending"){
+  } else if (context.query.slug.toString() == "trending") {
     let d = await podcast.find();
-    data=[]
-    d.map(item=>{item.like>1?data.push(item):data.push()})
+    data = [];
+    d.map((item) => {
+      item.like > 1 ? data.push(item) : data.push();
+    });
   } else {
     data = await podcast.find({ category: context.query.slug.toLowerCase() });
   }
