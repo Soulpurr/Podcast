@@ -3,6 +3,7 @@ import { getCookie } from "cookies-next";
 import React, { useEffect, useState } from "react";
 
 function SignUp() {
+  const [recieved, setrecieved] = useState(true);
   const router = useRouter();
   useEffect(() => {
     if (localStorage.getItem("user") || getCookie("user")) {
@@ -31,6 +32,7 @@ function SignUp() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setrecieved(false);
     const errors = validateForm(formValues);
     if (Object.keys(errors).length === 0) {
       console.log(formValues);
@@ -40,6 +42,7 @@ function SignUp() {
         body: JSON.stringify(formValues),
       });
       let res = await data.json();
+      setrecieved(true);
       router.push("/login");
       console.log(res);
     } else {
@@ -189,12 +192,21 @@ function SignUp() {
               </span>
             )}
           </div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Sign Up
-          </button>
+          <div className="flex justify-between">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Sign Up
+            </button>
+            <div
+              className={`${
+                recieved ? "hidden" : "flex"
+              } justify-center items-center`}
+            >
+              <div className="w-8 h-8 border-4 border-t-4 border-red-800 rounded-full animate-spin"></div>
+            </div>
+          </div>
         </form>
       </div>
     </div>

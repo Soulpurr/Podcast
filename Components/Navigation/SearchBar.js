@@ -10,7 +10,7 @@ function SearchBar() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    router.push("/SearchItem/query")
+    router.push(`/SearchItem/${query}`)
     
   }
 

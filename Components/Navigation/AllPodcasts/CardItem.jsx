@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 import { BsHandThumbsUpFill } from "react-icons/bs";
@@ -18,7 +17,7 @@ function CardItem(props) {
           >
             <img
               layout="responsive"
-              src={`https://picsum.photos/200/200?random=${Math.random()}`}
+              src={`https://picsum.photos/200/100?random=${Math.random()}`}
               height={1080}
               width={1920}
             />
