@@ -1,16 +1,3 @@
-Deployment Link-https://your-hr-dusky.vercel.app/
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-In this webapp users can sign up and add their resumes and all their data is stroed in mongodb
-For storing file cloudinary is used
-
-Tech Stack Used-
-Nextjs
-Mongoose
-MongoDb
-Jsonwebtoken
-cloudinary
 
 ## Getting Started
 
